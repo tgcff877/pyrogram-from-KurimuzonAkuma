@@ -1,4 +1,4 @@
-from . import PatchHelper
+from .fsm_helper import FSMHelper
 
 
 class StateFilter:
@@ -8,7 +8,7 @@ class StateFilter:
 
     def __call__(_, __, query) -> bool:
         try:
-            return _.state == PatchHelper.get_from_pool(query).state.name
+            return _.state == FSMHelper.get_from_pool(query).state.name
         except Exception:
             raise RuntimeError(
                 'check storage'
