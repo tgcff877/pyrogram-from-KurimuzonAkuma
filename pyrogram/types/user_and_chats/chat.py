@@ -73,6 +73,9 @@ class Chat(Object):
         last_name (``str``, *optional*):
             Last name of the other party in a private chat, for private chats.
 
+        full_name (``str``, *optional*):
+            Full name of the other party in a private chat, for private chats and bots.
+
         photo (:obj:`~pyrogram.types.ChatPhoto`, *optional*):
             Chat photo. Suitable for downloads only.
 
@@ -155,6 +158,7 @@ class Chat(Object):
         usernames: List["types.Username"] = None,
         first_name: str = None,
         last_name: str = None,
+        full_name: str = None,
         photo: "types.ChatPhoto" = None,
         bio: str = None,
         description: str = None,
@@ -188,6 +192,7 @@ class Chat(Object):
         self.usernames = usernames
         self.first_name = first_name
         self.last_name = last_name
+        self.full_name = full_name
         self.photo = photo
         self.bio = bio
         self.description = description
@@ -221,6 +226,7 @@ class Chat(Object):
             usernames=types.List([types.Username._parse(r) for r in user.usernames]) or None,
             first_name=user.first_name,
             last_name=user.last_name,
+            full_name=" ".join(filter(None, [user.first_name, user.last_name])) or None,
             photo=types.ChatPhoto._parse(client, user.photo, peer_id, user.access_hash),
             restrictions=types.List([types.Restriction._parse(r) for r in user.restriction_reason]) or None,
             dc_id=getattr(getattr(user, "photo", None), "dc_id", None),
