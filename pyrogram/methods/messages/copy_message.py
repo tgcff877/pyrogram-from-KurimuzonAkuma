@@ -36,6 +36,7 @@ class CopyMessage:
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: List["types.MessageEntity"] = None,
         disable_notification: bool = None,
+        message_thread_id: int = None,
         reply_to_message_id: int = None,
         schedule_date: datetime = None,
         protect_content: bool = None,
@@ -83,6 +84,10 @@ class CopyMessage:
                 Sends the message silently.
                 Users will receive a notification with no sound.
 
+            message_thread_id (``int``, *optional*):
+                Unique identifier for the target message thread (topic) of the forum.
+                for forum supergroups only.
+
             reply_to_message_id (``int``, *optional*):
                 If the message is a reply, ID of the original message.
 
@@ -108,13 +113,27 @@ class CopyMessage:
         """
         message: types.Message = await self.get_messages(from_chat_id, message_id)
 
+        reply_to = None
+        if reply_to_message_id or message_thread_id:
+            reply_to_msg_id = None
+            top_msg_id = None
+            if message_thread_id:
+                if not reply_to_message_id:
+                    reply_to_msg_id = message_thread_id
+                else:
+                    reply_to_msg_id = reply_to_message_id
+                    top_msg_id = message_thread_id
+            else:
+                reply_to_msg_id = reply_to_message_id
+            reply_to = raw.types.InputReplyToMessage(reply_to_msg_id=reply_to_msg_id, top_msg_id=top_msg_id)
+
         return await message.copy(
             chat_id=chat_id,
             caption=caption,
             parse_mode=parse_mode,
             caption_entities=caption_entities,
             disable_notification=disable_notification,
-            reply_to_message_id=reply_to_message_id,
+            reply_to=reply_to,
             schedule_date=schedule_date,
             protect_content=protect_content,
             reply_markup=reply_markup
