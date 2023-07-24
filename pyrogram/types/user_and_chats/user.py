@@ -106,6 +106,9 @@ class User(Object, Update):
         last_name (``str``, *optional*):
             User's or bot's last name.
 
+        full_name (``str``, *optional*):
+            User's or bot's full name.
+
         status (:obj:`~pyrogram.enums.UserStatus`, *optional*):
             User's last seen & online status. ``None``, for bots.
 
@@ -168,6 +171,7 @@ class User(Object, Update):
         is_premium: bool = None,
         first_name: str = None,
         last_name: str = None,
+        full_name: str = None,
         status: "enums.UserStatus" = None,
         last_online_date: datetime = None,
         next_offline_date: datetime = None,
@@ -196,6 +200,7 @@ class User(Object, Update):
         self.is_premium = is_premium
         self.first_name = first_name
         self.last_name = last_name
+        self.full_name = full_name
         self.status = status
         self.last_online_date = last_online_date
         self.next_offline_date = next_offline_date
@@ -236,6 +241,7 @@ class User(Object, Update):
             is_premium=user.premium,
             first_name=user.first_name,
             last_name=user.last_name,
+            full_name=" ".join(filter(None, [user.first_name, user.last_name])) or None,
             **User._parse_status(user.status, user.bot),
             username=user.username,
             usernames=types.List([types.Username._parse(r) for r in user.usernames]) or None,
