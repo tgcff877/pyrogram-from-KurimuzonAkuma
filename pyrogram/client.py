@@ -57,6 +57,7 @@ from .file_id import FileId, FileType, ThumbnailSource
 from .mime_types import mime_types
 from .parser import Parser
 from .session.internals import MsgId
+from .fsm.fsm_helper import FSMData
 
 log = logging.getLogger(__name__)
 
@@ -1035,6 +1036,18 @@ class Client(Methods):
 
     def guess_extension(self, mime_type: str) -> Optional[str]:
         return self.mimetypes.guess_extension(mime_type)
+
+    def include_middleware(self, middleware) -> None:
+        FSMData.pyrogram_patch_middlewares.append(middleware)
+
+    def include_outer_middleware(self, middleware) -> None:
+        FSMData.pyrogram_patch_outer_middlewares.append(middleware)
+
+    def set_storage(self, storage) -> None:
+        FSMData.pyrogram_patch_fsm_storage = storage
+
+    def include_router(self, router) -> None:
+        router.set_client(self)
 
 
 class Cache:

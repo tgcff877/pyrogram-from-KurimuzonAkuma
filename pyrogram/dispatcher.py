@@ -26,7 +26,7 @@ from pyrogram import utils
 from pyrogram.handlers import (
     CallbackQueryHandler, MessageHandler, EditedMessageHandler, DeletedMessagesHandler,
     UserStatusHandler, RawUpdateHandler, InlineQueryHandler, PollHandler,
-    ChosenInlineResultHandler, ChatMemberUpdatedHandler, ChatJoinRequestHandler, ErrorHandler
+    ChosenInlineResultHandler, ChatMemberUpdatedHandler, ChatJoinRequestHandler
 )
 from pyrogram.raw.types import (
     UpdateNewMessage, UpdateNewChannelMessage, UpdateNewScheduledMessage,
@@ -37,6 +37,8 @@ from pyrogram.raw.types import (
     UpdateBotInlineSend, UpdateChatParticipant, UpdateChannelParticipant,
     UpdateBotChatInviteRequester
 )
+
+from pyrogram.fsm.fsm_helper import FSMData, FSMHelper
 
 log = logging.getLogger(__name__)
 
@@ -62,7 +64,6 @@ class Dispatcher:
 
         self.updates_queue = asyncio.Queue()
         self.groups = OrderedDict()
-        self.error_handlers = []
 
         async def message_parser(update, users, chats):
             return (
@@ -164,7 +165,6 @@ class Dispatcher:
 
             self.handler_worker_tasks.clear()
             self.groups.clear()
-            self.error_handlers.clear()
 
             log.info("Stopped %s HandlerTasks", self.client.workers)
 
@@ -174,15 +174,11 @@ class Dispatcher:
                 await lock.acquire()
 
             try:
-                if isinstance(handler, ErrorHandler):
-                    if handler not in self.error_handlers:
-                        self.error_handlers.append(handler)
-                else:
-                    if group not in self.groups:
-                        self.groups[group] = []
-                        self.groups = OrderedDict(sorted(self.groups.items()))
+                if group not in self.groups:
+                    self.groups[group] = []
+                    self.groups = OrderedDict(sorted(self.groups.items()))
 
-                    self.groups[group].append(handler)
+                self.groups[group].append(handler)
             finally:
                 for lock in self.locks_list:
                     lock.release()
@@ -195,16 +191,10 @@ class Dispatcher:
                 await lock.acquire()
 
             try:
-                if isinstance(handler, ErrorHandler):
-                    if handler not in self.error_handlers:
-                        raise ValueError(f"Error handler {handler} does not exist. Handler was not removed.")
+                if group not in self.groups:
+                    raise ValueError(f"Group {group} does not exist. Handler was not removed.")
 
-                    self.error_handlers.remove(handler)
-                else:
-                    if group not in self.groups:
-                        raise ValueError(f"Group {group} does not exist. Handler was not removed.")
-
-                    self.groups[group].remove(handler)
+                self.groups[group].remove(handler)
             finally:
                 for lock in self.locks_list:
                     lock.release()
@@ -222,11 +212,29 @@ class Dispatcher:
                 update, users, chats = packet
                 parser = self.update_parsers.get(type(update), None)
 
-                parsed_update, handler_type = (
+                parsed_updates, handler_type = (
                     await parser(update, users, chats)
                     if parser is not None
                     else (None, type(None))
                 )
+
+                if parsed_updates is None:
+                    continue
+
+                fsm_helper = FSMHelper()
+                FSMData.include_helper_to_pool(parsed_updates, fsm_helper)
+
+                if FSMData.pyrogram_patch_fsm_storage:
+                    await fsm_helper._include_state(
+                        parsed_updates, FSMData.pyrogram_patch_fsm_storage, self.client
+                    )
+
+                # process outer middlewares
+                for middleware in FSMData.pyrogram_patch_outer_middlewares:
+                    if middleware == handler_type:
+                        await fsm_helper._process_middleware(
+                            parsed_updates, middleware, self.client
+                        )
 
                 async with lock:
                     for group in self.groups.values():
@@ -235,22 +243,51 @@ class Dispatcher:
 
                             if isinstance(handler, handler_type):
                                 try:
-                                    if await handler.check(self.client, parsed_update):
-                                        args = (parsed_update,)
+                                    # filtering event
+                                    if await handler.check(self.client, parsed_updates):
+                                        # process middlewares
+                                        for middleware in FSMData.pyrogram_patch_middlewares:
+                                            if middleware == type(handler):
+                                                await fsm_helper._process_middleware(
+                                                    parsed_updates,
+                                                    middleware,
+                                                    self.client,
+                                                )
+                                        args = (parsed_updates,)
                                 except Exception as e:
                                     log.exception(e)
+                                    FSMData.exclude_helper_from_pool(parsed_updates)
                                     continue
 
                             elif isinstance(handler, RawUpdateHandler):
-                                args = (update, users, chats)
-
+                                try:
+                                    # process middlewares
+                                    for middleware in FSMData.pyrogram_patch_middlewares:
+                                        if middleware == type(handler):
+                                            await fsm_helper._process_middleware(
+                                                parsed_updates,
+                                                middleware,
+                                                self.client,
+                                            )
+                                    args = (update, users, chats)
+                                except pyrogram.StopPropagation:
+                                    FSMData.exclude_helper_from_pool(parsed_updates)
+                                    continue
                             if args is None:
                                 continue
 
                             try:
+                                # formation kwargs
+                                kwargs = await fsm_helper._get_data_for_handler(
+                                    handler.callback.__code__.co_varnames
+                                )
                                 if inspect.iscoroutinefunction(handler.callback):
-                                    await handler.callback(self.client, *args)
+                                    await handler.callback(self.client, *args, **kwargs)
                                 else:
+                                    args = list(args)
+                                    for v in kwargs.values():
+                                        args.append(v)
+                                    args = tuple(args)
                                     await self.loop.run_in_executor(
                                         self.client.executor,
                                         handler.callback,
@@ -262,33 +299,11 @@ class Dispatcher:
                             except pyrogram.ContinuePropagation:
                                 continue
                             except Exception as e:
-                                handled_error = False
-                                for error_handler in self.error_handlers:
-                                    try:
-                                        if await error_handler.check(self.client, e):
-                                            if inspect.iscoroutinefunction(error_handler.callback):
-                                                await error_handler.callback(self.client, e)
-                                            else:
-                                                await self.loop.run_in_executor(
-                                                    self.client.executor,
-                                                    error_handler.callback,
-                                                    self.client,
-                                                    e
-                                                )
-                                            handled_error = True  # If the error is handled, don't log it
-                                            break
-                                    except pyrogram.StopPropagation:
-                                        raise
-                                    except pyrogram.ContinuePropagation:
-                                        continue
-                                    except Exception as e:
-                                        log.exception(e)
-                                        continue
-
-                                if not handled_error:
-                                    log.exception(e)
-
+                                log.exception(e)
+                            finally:
+                                FSMData.exclude_helper_from_pool(parsed_updates)
                             break
+                    FSMData.exclude_helper_from_pool(parsed_updates)
             except pyrogram.StopPropagation:
                 pass
             except Exception as e:
