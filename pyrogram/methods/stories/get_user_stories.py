@@ -1,12 +1,12 @@
 import pyrogram
-from pyrogram import raw
+from pyrogram import raw, types
 
 
 class GetUserStories:
     async def get_all_stories(
             self: "pyrogram.Client",
             user_id: "raw.base.InputUser",
-    ) -> "raw.base.stories.UserStories":
+    ) -> "types.UserStories":
         """Get all user stories
 
         .. include:: ...
@@ -16,7 +16,7 @@ class GetUserStories:
                 N/A
 
         Returns:
-            :obj:`stories.UserStories <pyrogram.raw.base.stories.UserStories>`
+            :obj:`stories.UserStories <pyrogram.types.UserStories>`
 
         Example:
             .. code-block:: python
@@ -27,4 +27,4 @@ class GetUserStories:
                 user_id=user_id
             )
         )
-        return r
+        return types.UserStories._parse(r)

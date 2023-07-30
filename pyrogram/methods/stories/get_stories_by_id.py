@@ -9,7 +9,7 @@ class GetStoriesByID:
             self: "pyrogram.Client",
             user_id: "raw.base.InputUser",
             stories_id: List[int]
-    ) -> "raw.base.stories.Stories":
+    ) -> "types.Stories":
         """Get stories by id
 
         .. include:: ...
@@ -22,7 +22,7 @@ class GetStoriesByID:
                 N/A
 
         Returns:
-            :obj:`stories.Stories <pyrogram.raw.base.stories.Stories>`
+            :obj:`stories.Stories <pyrogram.types.Stories>`
 
         Example:
             .. code-block:: python
@@ -33,4 +33,4 @@ class GetStoriesByID:
                 user_id=user_id, id=stories_id
             )
         )
-        return r
+        return types.Stories._parse(r)

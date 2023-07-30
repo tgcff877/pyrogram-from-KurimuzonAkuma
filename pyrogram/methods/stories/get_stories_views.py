@@ -8,7 +8,7 @@ class GetStoriesViews:
     async def get_stories_views(
             self: "pyrogram.Client",
             stories_id: List[int],
-    ) -> "raw.base.stories.StoryViews":
+    ) -> "types.StoryViews":
         """Get stories views
 
         .. include:: ...
@@ -18,7 +18,7 @@ class GetStoriesViews:
                 N/A
 
         Returns:
-            :obj:`stories.StoryViews <pyrogram.raw.base.stories.StoryViews>`
+            :obj:`stories.StoryViews <pyrogram.types.StoryViews>`
 
         Example:
             .. code-block:: python
@@ -29,4 +29,4 @@ class GetStoriesViews:
                 id=stories_id
             )
         )
-        return r
+        return types.StoryViews._parse(r)

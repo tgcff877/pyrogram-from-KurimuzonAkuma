@@ -1,5 +1,5 @@
 import pyrogram
-from pyrogram import raw
+from pyrogram import raw, types
 
 
 class GetPinnedStories:
@@ -8,7 +8,7 @@ class GetPinnedStories:
             user_id: "raw.base.InputUser",
             offset_id: int,
             limit: int,
-    ) -> "raw.base.stories.Stories":
+    ) -> "types.Stories":
         """Get all pinned stories
 
         .. include:: ...
@@ -24,7 +24,7 @@ class GetPinnedStories:
                 N/A
 
         Returns:
-            :obj:`stories.Stories <pyrogram.raw.base.stories.Stories>`
+            :obj:`stories.Stories <pyrogram.types.Stories>`
 
         Example:
             .. code-block:: python
@@ -35,4 +35,4 @@ class GetPinnedStories:
                 user_id=user_id, offset_id=offset_id, limit=limit
             )
         )
-        return r
+        return types.Stories._parse(r)

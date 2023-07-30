@@ -1,7 +1,5 @@
-from typing import Optional
-
 import pyrogram
-from pyrogram import types, raw
+from pyrogram import raw, types
 
 
 class ExportStoryLink:
@@ -9,7 +7,7 @@ class ExportStoryLink:
             self: "pyrogram.Client",
             user_id: "raw.base.InputUser",
             story_id: int,
-    ) -> "raw.base.ExportedStoryLink":
+    ) -> "types.ExportedStoryLink":
         """Export story link
 
         .. include:: ...
@@ -33,4 +31,4 @@ class ExportStoryLink:
                 user_id=user_id, id=story_id
             )
         )
-        return r
+        return types.ExportedStoryLink._parse(r)

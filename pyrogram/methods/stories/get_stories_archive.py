@@ -7,7 +7,7 @@ class GetStoriesArchive:
             self: "pyrogram.Client",
             offset_id: int,
             limit: int,
-    ) -> "raw.base.stories.Stories":
+    ) -> "types.Stories":
         """Get all archive stories
 
         .. include:: ...
@@ -20,7 +20,7 @@ class GetStoriesArchive:
                 N/A
 
         Returns:
-            :obj:`stories.Stories <pyrogram.raw.base.stories.Stories>`
+            :obj:`stories.Stories <pyrogram.types.Stories>`
 
         Example:
             .. code-block:: python
@@ -31,4 +31,4 @@ class GetStoriesArchive:
                 offset_id=offset_id, limit=limit
             )
         )
-        return r
+        return types.Stories._parse(r)

@@ -9,7 +9,7 @@ class GetStoryViewsList:
             offset_date: int,
             offset_id: int,
             limit: int,
-    ) -> "raw.base.stories.StoryViewsList":
+    ) -> "types.StoryViewsList":
         """Get story views list
 
         .. include:: ...
@@ -28,7 +28,7 @@ class GetStoryViewsList:
                 N/A
 
         Returns:
-            :obj:`stories.StoryViewsList <pyrogram.raw.base.stories.StoryViewsList>`
+            :obj:`stories.StoryViewsList <pyrogram.types.StoryViewsList>`
 
         Example:
             .. code-block:: python
@@ -39,4 +39,4 @@ class GetStoryViewsList:
                 id=story_id, offset_date=offset_date, offset_id=offset_id, limit=limit
             )
         )
-        return r
+        return types.StoryViewsList._parse(r)

@@ -1,13 +1,13 @@
-from typing import List, Dict
+from typing import List
 
 import pyrogram
-from pyrogram import types, raw
+from pyrogram import raw
 
 
 class DeleteStories:
     async def delete_stories(
-        self: "pyrogram.Client",
-        stories_id: List[int],
+            self: "pyrogram.Client",
+            stories_id: List[int],
     ) -> List[int]:
         """Delete stories
 

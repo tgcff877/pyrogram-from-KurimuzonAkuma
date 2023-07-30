@@ -1,13 +1,13 @@
-from typing import Optional
-
 import pyrogram
 from pyrogram import types, raw
+
+from typing import List
 
 
 class GetAllReadUserStories:
     async def get_all_readed_stories(
             self: "pyrogram.Client",
-    ) -> "raw.base.Updates":
+    ) -> List[types.AllReadedStories]:
         """Get all read user stories
 
         .. include:: ...
@@ -25,4 +25,4 @@ class GetAllReadUserStories:
         r = await self.invoke(
             raw.functions.stories.GetAllReadUserStories()
         )
-        return r
+        return [types.AllReadedStories._parse(i) for i in r.updates]
