@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Union
 
 import pyrogram
 from pyrogram import types, raw
@@ -7,7 +7,7 @@ from pyrogram import types, raw
 class SendStory:
     async def send_story(
             self: "pyrogram.Client",
-            media: "raw.base.InputMedia",
+            media: Union[str, "raw.base.InputMedia"],
             privacy_rules: List["raw.base.InputPrivacyRule"],
             random_id: int,
             pinned: Optional[bool] = None,
@@ -15,16 +15,16 @@ class SendStory:
             caption: Optional[str] = None,
             entities: Optional[List["raw.base.MessageEntity"]] = None,
             period: Optional[int] = None
-    ) -> "types.AllStories":
+    ) -> "types.UpdateStory":
         """Send Story
 
         .. include:: ...
 
         Parameters:
             media (:obj:`InputMedia <pyrogram.raw.base.InputMedia>`):
-                N/A
+                Support video and photo.
 
-            privacy_rules (List of :obj:`InputPrivacyRule <pyrogram.raw.base.InputPrivacyRule>`):
+            privacy_rules (:obj:`InputPrivacyRule <pyrogram.raw.base.InputPrivacyRule>`):
                 N/A
 
             random_id (``int`` ``64-bit``):
@@ -52,10 +52,23 @@ class SendStory:
             .. code-block:: python
             N/A
         """
+
+        if isinstance(media, str):
+            media_type = self.guess_mime_type(media).split("/")[0]
+            if media_type == "video":
+                media = raw.types.InputMediaUploadedDocument(
+                    file=await self.save_file(media),
+                    mime_type=self.guess_mime_type(media),
+                    attributes=[],
+                )
+            elif media_type == "image":
+                media = raw.types.InputMediaUploadedPhoto(
+                    file=await self.save_file(media),
+                )
         r = await self.invoke(
             raw.functions.stories.SendStory(
                 media=media, privacy_rules=privacy_rules, random_id=random_id, pinned=pinned, noforwards=no_forwards,
                 caption=caption, entities=entities, period=period
             )
         )
-        return r
+        return types.UpdateStory._parse(r.updates[0])

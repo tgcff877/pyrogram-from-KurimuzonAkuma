@@ -5,6 +5,7 @@ from .story_views_list import StoryViewsList
 from .user_stories import UserStories
 from .exported_story_link import ExportedStoryLink
 from .all_readed_stories import AllReadedStories
+from .update_story import UpdateStory
 
 
 __all__ = [
@@ -14,5 +15,6 @@ __all__ = [
     "StoryViewsList",
     "UserStories",
     "ExportedStoryLink",
-    "AllReadedStories"
+    "AllReadedStories",
+    "UpdateStory"
 ]
