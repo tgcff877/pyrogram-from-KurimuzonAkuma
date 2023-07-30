@@ -1,4 +1,4 @@
-from typing import Optional, List, Union
+from typing import Optional, List, Union, BinaryIO
 
 import pyrogram
 from pyrogram import types, raw
@@ -7,7 +7,7 @@ from pyrogram import types, raw
 class SendStory:
     async def send_story(
             self: "pyrogram.Client",
-            media: Union[str, "raw.base.InputMedia"],
+            media: Union[str, "raw.base.InputMedia", BinaryIO],
             privacy_rules: List["raw.base.InputPrivacyRule"],
             random_id: int,
             pinned: Optional[bool] = None,
@@ -64,6 +64,19 @@ class SendStory:
             elif media_type == "image":
                 media = raw.types.InputMediaUploadedPhoto(
                     file=await self.save_file(media),
+                )
+        if isinstance(media, BinaryIO):
+            file = await self.save_file(media)
+            media_type = self.guess_mime_type(file.name).split("/")[0]
+            if media_type == "video":
+                media = raw.types.InputMediaUploadedDocument(
+                    file=file,
+                    mime_type=self.guess_mime_type(file.name),
+                    attributes=[],
+                )
+            elif media_type == "image":
+                media = raw.types.InputMediaUploadedPhoto(
+                    file=file,
                 )
         r = await self.invoke(
             raw.functions.stories.SendStory(
