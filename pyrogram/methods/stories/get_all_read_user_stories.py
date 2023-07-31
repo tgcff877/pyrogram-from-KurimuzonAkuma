@@ -5,7 +5,7 @@ from typing import List
 
 
 class GetAllReadUserStories:
-    async def get_all_readed_stories(
+    async def get_all_read_stories(
             self: "pyrogram.Client",
     ) -> List[types.AllReadedStories]:
         """Get all read user stories
