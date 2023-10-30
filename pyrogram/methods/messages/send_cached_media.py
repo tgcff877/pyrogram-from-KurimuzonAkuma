@@ -117,7 +117,12 @@ class SendCachedMedia:
                 media=utils.get_input_media_from_file_id(file_id),
                 silent=disable_notification or None,
                 invert_media=invert_media,
-                reply_to=utils.get_reply_to(reply_to_message_id, message_thread_id, peer, reply_to_story_id),
+                reply_to=utils.get_reply_to(
+                    reply_to_message_id=reply_to_message_id,
+                    message_thread_id=message_thread_id,
+                    reply_to_peer=peer,
+                    reply_to_story_id=reply_to_story_id
+                ),
                 random_id=self.rnd_id(),
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 noforwards=protect_content,
