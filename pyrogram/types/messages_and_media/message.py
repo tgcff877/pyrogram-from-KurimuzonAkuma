@@ -167,12 +167,21 @@ class Message(Object, Update):
             *text.html* to get the marked up message text. In case there is no entity, the fields
             will contain the same text as *text*.
 
+        quote_text (``str``, *optional*):
+            For quote messages, the actual UTF-8 text of the message, 0-4096 characters.
+            If the quote contains entities (bold, italic, ...) you can access *text.markdown* or
+            *text.html* to get the marked up message text. In case there is no entity, the fields
+            will contain the same text as *text*.
+
         entities (List of :obj:`~pyrogram.types.MessageEntity`, *optional*):
             For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text.
 
         caption_entities (List of :obj:`~pyrogram.types.MessageEntity`, *optional*):
             For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear
             in the caption.
+
+        quote_entities (List of :obj:`~pyrogram.types.MessageEntity`, *optional*):
+            For quote messages, special entities like usernames, URLs, bot commands, etc. that appear in the text.
 
         audio (:obj:`~pyrogram.types.Audio`, *optional*):
             Message is an audio file, information about the file.
@@ -295,6 +304,9 @@ class Message(Object, Update):
             Messages sent from yourself to other chats are outgoing (*outgoing* is True).
             An exception is made for your own personal chat; messages sent there will be incoming.
 
+        quote (``bool``, *optional*):
+            The message contains a quote.
+
         matches (List of regex Matches, *optional*):
             A list containing all `Match Objects <https://docs.python.org/3/library/re.html#match-objects>`_ that match
             the text of this message. Only applicable when using :obj:`Filters.regex <pyrogram.Filters.regex>`.
@@ -387,8 +399,10 @@ class Message(Object, Update):
         has_protected_content: bool = None,
         has_media_spoiler: bool = None,
         text: Str = None,
+        quote_text: Str = None,
         entities: List["types.MessageEntity"] = None,
         caption_entities: List["types.MessageEntity"] = None,
+        quote_entities: List["types.MessageEntity"] = None,
         audio: "types.Audio" = None,
         document: "types.Document" = None,
         photo: "types.Photo" = None,
@@ -422,6 +436,7 @@ class Message(Object, Update):
         forwards: int = None,
         via_bot: "types.User" = None,
         outgoing: bool = None,
+        quote: bool = None,
         matches: List[Match] = None,
         command: List[str] = None,
         forum_topic_created: "types.ForumTopicCreated" = None,
@@ -478,8 +493,10 @@ class Message(Object, Update):
         self.has_protected_content = has_protected_content
         self.has_media_spoiler = has_media_spoiler
         self.text = text
+        self.quote_text = quote_text
         self.entities = entities
         self.caption_entities = caption_entities
+        self.quote_entities = quote_entities
         self.audio = audio
         self.document = document
         self.photo = photo
@@ -513,6 +530,7 @@ class Message(Object, Update):
         self.forwards = forwards
         self.via_bot = via_bot
         self.outgoing = outgoing
+        self.quote = quote
         self.matches = matches
         self.command = command
         self.reply_markup = reply_markup
@@ -971,6 +989,21 @@ class Message(Object, Update):
                             except Exception:
                                 pass
                     else:
+                        if message.reply_to.quote:
+                            quote_entities = [types.MessageEntity._parse(client, entity, users) for entity in message.reply_to.quote_entities]
+                            quote_entities = types.List(filter(lambda x: x is not None, quote_entities))
+
+                            parsed_message.quote = message.reply_to.quote
+                            parsed_message.quote_text = (
+                                Str(message.reply_to.quote_text).init(quote_entities) or None
+                                if media is None or web_page is not None
+                                else None
+                            )
+                            parsed_message.quote_entities = (
+                                quote_entities or None
+                                if media is None or web_page is not None
+                                else None
+                            )
                         parsed_message.reply_to_message_id = message.reply_to.reply_to_msg_id
                         parsed_message.reply_to_top_message_id = message.reply_to.reply_to_top_id
                 else:
