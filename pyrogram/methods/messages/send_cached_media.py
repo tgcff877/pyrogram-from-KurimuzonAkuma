@@ -41,6 +41,7 @@ class SendCachedMedia:
         schedule_date: datetime = None,
         protect_content: bool = None,
         invert_media: bool = None,
+        has_spoiler: bool = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -105,6 +106,9 @@ class SendCachedMedia:
             invert_media (``bool``, *optional*):
                 Invert media.
 
+            has_spoiler (``bool``, *optional*):
+                True, if the message media is covered by a spoiler animation.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -123,7 +127,7 @@ class SendCachedMedia:
         r = await self.invoke(
             raw.functions.messages.SendMedia(
                 peer=peer,
-                media=utils.get_input_media_from_file_id(file_id),
+                media=utils.get_input_media_from_file_id(file_id, has_spoiler=has_spoiler),
                 silent=disable_notification or None,
                 invert_media=invert_media,
                 reply_to=utils.get_reply_to(
