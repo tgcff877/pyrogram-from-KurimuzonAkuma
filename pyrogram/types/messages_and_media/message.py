@@ -3500,7 +3500,10 @@ class Message(Object, Update):
         caption_entities: List["types.MessageEntity"] = None,
         disable_notification: bool = None,
         message_thread_id: int = None,
+        reply_to_chat_id: int = None,
         reply_to_message_id: int = None,
+        quote_text: str = None,
+        quote_entities: List["types.MessageEntity"] = None,
         schedule_date: datetime = None,
         protect_content: bool = None,
         reply_markup: Union[
@@ -3553,8 +3556,17 @@ class Message(Object, Update):
                 Unique identifier for the target message thread (topic) of the forum.
                 for forum supergroups only.
 
+            reply_to_chat_id (``int``, *optional*):
+                If the message is a reply, ID of the original chat.
+
             reply_to_message_id (``int``, *optional*):
                 If the message is a reply, ID of the original message.
+
+            quote_text (``str``):
+                Text of the quote to be sent.
+
+            quote_entities (List of :obj:`~pyrogram.types.MessageEntity`):
+                List of special entities that appear in quote text, which can be specified instead of *parse_mode*.
 
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
@@ -3591,6 +3603,7 @@ class Message(Object, Update):
                 disable_web_page_preview=not self.web_page,
                 disable_notification=disable_notification,
                 message_thread_id=message_thread_id,
+                reply_to_chat_id=reply_to_chat_id,
                 reply_to_message_id=reply_to_message_id,
                 schedule_date=schedule_date,
                 protect_content=protect_content,
@@ -3603,6 +3616,8 @@ class Message(Object, Update):
                 disable_notification=disable_notification,
                 message_thread_id=message_thread_id,
                 reply_to_message_id=reply_to_message_id,
+                quote_text=quote_text,
+                quote_entities=quote_entities,
                 schedule_date=schedule_date,
                 protect_content=protect_content,
                 reply_markup=self.reply_markup if reply_markup is object else reply_markup
