@@ -146,9 +146,8 @@ class SendMessage:
         quote_text, quote_entities = (await utils.parse_text_entities(self, quote_text, parse_mode, quote_entities)).values()
 
         peer = await self.resolve_peer(chat_id)
-        reply_to_peer = peer
         if reply_to_chat_id:
-            reply_to_peer = await self.resolve_peer(reply_to_chat_id)
+            peer = await self.resolve_peer(reply_to_chat_id)
 
         r = await self.invoke(
             raw.functions.messages.SendMessage(
@@ -158,7 +157,7 @@ class SendMessage:
                 reply_to=utils.get_reply_to(
                     reply_to_message_id=reply_to_message_id,
                     message_thread_id=message_thread_id,
-                    reply_to_peer=reply_to_peer,
+                    reply_to_peer=peer,
                     reply_to_story_id=reply_to_story_id,
                     quote_text=quote_text,
                     quote_entities=quote_entities,
