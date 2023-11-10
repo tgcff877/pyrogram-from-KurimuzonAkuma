@@ -85,6 +85,15 @@ class WebPage(Object):
 
         author (``str``, *optional*):
             Author of the webpage, eg the Twitter user for a tweet, or the author in an article.
+
+        force_large_media (``bool``, *optional*):
+            Request the client to enlarge the webpage preview.
+
+        force_small_media (``bool``, *optional*):
+            Request the client to shrink the webpage preview.
+
+        manual (``bool``, *optional*):
+            Whether the webpage preview was changed by the user.
     """
 
     def __init__(
@@ -109,7 +118,10 @@ class WebPage(Object):
         embed_width: int = None,
         embed_height: int = None,
         duration: int = None,
-        author: str = None
+        author: str = None,
+        force_large_media: bool = None,
+        force_small_media: bool = None,
+        manual: bool = None
     ):
         super().__init__(client)
 
@@ -132,9 +144,18 @@ class WebPage(Object):
         self.embed_height = embed_height
         self.duration = duration
         self.author = author
+        self.force_large_media = force_large_media
+        self.force_small_media = force_small_media
+        self.manual = manual
 
     @staticmethod
-    def _parse(client, webpage: "raw.types.WebPage") -> "WebPage":
+    def _parse(
+        client,
+        webpage: "raw.types.WebPage",
+        force_large_media: bool = None,
+        force_small_media: bool = None,
+        manual: bool = None
+    ) -> "WebPage":
         audio = None
         document = None
         photo = None
@@ -189,5 +210,6 @@ class WebPage(Object):
             embed_width=webpage.embed_width,
             embed_height=webpage.embed_height,
             duration=webpage.duration,
-            author=webpage.author
+            author=webpage.author,
+            force_large_media=webpage
         )
