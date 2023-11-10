@@ -211,5 +211,7 @@ class WebPage(Object):
             embed_height=webpage.embed_height,
             duration=webpage.duration,
             author=webpage.author,
-            force_large_media=webpage
+            force_large_media=force_large_media,
+            force_small_media=force_small_media,
+            manual=manual
         )
