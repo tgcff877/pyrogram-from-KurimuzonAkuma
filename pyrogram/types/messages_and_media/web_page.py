@@ -36,6 +36,9 @@ class WebPage(Object):
         display_url (``str``):
             Display URL for this webpage.
 
+        has_large_media (``bool``, *optional*):
+            Whether the webpage preview is large.
+
         type (``str``, *optional*):
             Type of webpage preview, known types (at the time of writing) are:
             *"article"*, *"photo"*, *"gif"*, *"video"* and *"document"*,
@@ -91,6 +94,7 @@ class WebPage(Object):
         id: str,
         url: str,
         display_url: str,
+        has_large_media: bool = None,
         type: str = None,
         site_name: str = None,
         title: str = None,
@@ -112,6 +116,7 @@ class WebPage(Object):
         self.id = id
         self.url = url
         self.display_url = display_url
+        self.has_large_media = has_large_media
         self.type = type
         self.site_name = site_name
         self.title = title
@@ -169,6 +174,7 @@ class WebPage(Object):
             id=str(webpage.id),
             url=webpage.url,
             display_url=webpage.display_url,
+            has_large_media=webpage.has_large_media,
             type=webpage.type,
             site_name=webpage.site_name,
             title=webpage.title,
