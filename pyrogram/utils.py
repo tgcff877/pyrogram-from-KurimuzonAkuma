@@ -171,7 +171,7 @@ async def parse_messages(
                     if reply.id == reply_id and not reply.forum_topic_created:
                         message.reply_to_message = reply
 
-        if message_reply_to_story:
+        if message_reply_to_story and not client.me.is_bot:
             for m in parsed_messages:
                 if not isinstance(m, types.Message):
                     continue
