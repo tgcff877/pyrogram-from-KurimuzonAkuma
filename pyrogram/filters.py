@@ -350,6 +350,17 @@ gift_code = create(gift_code_filter)
 
 # endregion
 
+# region requested_chat_filter
+async def requested_chat_filter(_, __, m: Message):
+    return bool(m.requested_chats)
+
+
+requested_chat = create(requested_chat_filter)
+"""Filter service messages for request chat."""
+
+
+# endregion
+
 # region video_filter
 async def video_filter(_, __, m: Message):
     return bool(m.video)
