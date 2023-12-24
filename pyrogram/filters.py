@@ -355,7 +355,7 @@ async def requested_chats_filter(_, __, m: Message):
     return bool(m.requested_chats)
 
 
-requesteds_chat = create(requesteds_chat_filter)
+requested_chats = create(requested_chats_filter)
 """Filter service messages for request chats."""
 
 
