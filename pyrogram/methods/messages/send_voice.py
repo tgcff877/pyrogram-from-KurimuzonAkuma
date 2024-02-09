@@ -176,7 +176,9 @@ class SendVoice:
         try:
             if isinstance(voice, str):
                 if os.path.isfile(voice):
-                    mime_type = utils.voiceAudioUrlFuxUps(self, voice, 2)
+                    mime_type = self.guess_mime_type(voice) or "audio/ogg"
+                    if mime_type == "audio/mpeg":
+                        mime_type = "audio/ogg"
                     file = await self.save_file(voice, progress=progress, progress_args=progress_args)
                     media = raw.types.InputMediaUploadedDocument(
                         mime_type=mime_type,
@@ -196,7 +198,9 @@ class SendVoice:
                 else:
                     media = utils.get_input_media_from_file_id(voice, FileType.VOICE)
             else:
-                mime_type = utils.voiceAudioUrlFuxUps(self, voice.name, 2)
+                mime_type = self.guess_mime_type(voice.name) or "audio/ogg"
+                if mime_type == "audio/mpeg":
+                    mime_type = "audio/ogg"
                 file = await self.save_file(voice, progress=progress, progress_args=progress_args)
                 media = raw.types.InputMediaUploadedDocument(
                     mime_type=mime_type,
