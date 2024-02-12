@@ -24,6 +24,7 @@ from setuptools import setup, find_packages
 from compiler.api import compiler as api_compiler
 from compiler.errors import compiler as errors_compiler
 
+
 with open("requirements.txt", encoding="utf-8") as r:
     requires = [i.strip() for i in r]
 

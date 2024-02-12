@@ -20,6 +20,8 @@ import logging
 
 import pyrogram
 from pyrogram import raw
+from pyrogram.types.client_status.status_update import StatusUpdateRaw
+
 
 log = logging.getLogger(__name__)
 
@@ -71,6 +73,8 @@ class Start:
             raise
         else:
             self.me = await self.get_me()
+            self.dispatcher.updates_queue.put_nowait(StatusUpdateRaw["READY"]._packet())
+
             await self.initialize()
 
             return self

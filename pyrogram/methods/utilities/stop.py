@@ -17,6 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import pyrogram
+from pyrogram.types.client_status.status_update import StatusUpdateRaw
 
 
 class Stop:
@@ -60,6 +61,8 @@ class Stop:
         async def do_it():
             await self.terminate()
             await self.disconnect()
+
+        self.dispatcher.updates_queue.put_nowait(StatusUpdateRaw["STOPPING"]._packet())
 
         if block:
             await do_it()

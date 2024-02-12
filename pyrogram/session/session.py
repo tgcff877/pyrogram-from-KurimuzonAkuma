@@ -32,7 +32,8 @@ from pyrogram.errors import (
     SecurityCheckMismatch
 )
 from pyrogram.raw.all import layer
-from pyrogram.raw.core import TLObject, MsgContainer, Int, FutureSalts
+from pyrogram.raw.core import TLObject, MsgContainer, Int, FutureSalt, FutureSalts
+from pyrogram.types.client_status.status_update import StatusUpdateRaw
 from .internals import MsgId, MsgFactory
 
 log = logging.getLogger(__name__)
@@ -152,6 +153,9 @@ class Session:
 
         self.is_started.set()
 
+        if not self.is_media:
+            self.client.dispatcher.updates_queue.put_nowait(StatusUpdateRaw["CONNECTED"]._packet())
+
         log.info("Session started")
 
     async def stop(self):
@@ -176,6 +180,9 @@ class Session:
                 await self.client.disconnect_handler(self.client)
             except Exception as e:
                 log.exception(e)
+
+        if not self.is_media:
+            self.client.dispatcher.updates_queue.put_nowait(StatusUpdateRaw["DISCONNECTED"]._packet())
 
         log.info("Session stopped")
 

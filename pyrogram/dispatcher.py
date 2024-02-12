@@ -26,7 +26,7 @@ from pyrogram import utils
 from pyrogram.handlers import (
     CallbackQueryHandler, MessageHandler, EditedMessageHandler, DeletedMessagesHandler,
     UserStatusHandler, RawUpdateHandler, InlineQueryHandler, PollHandler,
-    ChosenInlineResultHandler, ChatMemberUpdatedHandler, ChatJoinRequestHandler, StoryHandler
+    ChosenInlineResultHandler, ChatMemberUpdatedHandler, ChatJoinRequestHandler, StoryHandler, ClientStatusHandler
 )
 from pyrogram.raw.types import (
     UpdateNewMessage, UpdateNewChannelMessage, UpdateNewScheduledMessage,
@@ -37,6 +37,9 @@ from pyrogram.raw.types import (
     UpdateBotInlineSend, UpdateChatParticipant, UpdateChannelParticipant,
     UpdateBotChatInviteRequester, UpdateStory
 )
+
+from pyrogram.types.client_status.status_update import StatusUpdateRaw
+
 
 log = logging.getLogger(__name__)
 
@@ -49,6 +52,7 @@ class Dispatcher:
     CHAT_MEMBER_UPDATES = (UpdateChatParticipant, UpdateChannelParticipant)
     USER_STATUS_UPDATES = (UpdateUserStatus,)
     BOT_INLINE_QUERY_UPDATES = (UpdateBotInlineQuery,)
+    CLIENT_STATUS_UPDATES = (StatusUpdateRaw,)
     POLL_UPDATES = (UpdateMessagePoll,)
     CHOSEN_INLINE_RESULT_UPDATES = (UpdateBotInlineSend,)
     CHAT_JOIN_REQUEST_UPDATES = (UpdateBotChatInviteRequester,)
@@ -127,6 +131,12 @@ class Dispatcher:
                 ChatMemberUpdatedHandler
             )
 
+        async def client_status_update_parser(update, users, chats):
+            return pyrogram.types.StatusUpdate._parse(self.client, update), ClientStatusHandler
+
+        async def chat_join_request_parser(update, users, chats):
+            return pyrogram.types.ChatJoinRequest._parse(self.client, update, users, chats), ChatJoinRequestHandler
+
         async def chat_join_request_parser(update, users, chats):
             return (
                 pyrogram.types.ChatJoinRequest._parse(self.client, update, users, chats),
@@ -146,6 +156,7 @@ class Dispatcher:
             Dispatcher.CALLBACK_QUERY_UPDATES: callback_query_parser,
             Dispatcher.USER_STATUS_UPDATES: user_status_parser,
             Dispatcher.BOT_INLINE_QUERY_UPDATES: inline_query_parser,
+            Dispatcher.CLIENT_STATUS_UPDATES: client_status_update_parser,
             Dispatcher.POLL_UPDATES: poll_parser,
             Dispatcher.CHOSEN_INLINE_RESULT_UPDATES: chosen_inline_result_parser,
             Dispatcher.CHAT_MEMBER_UPDATES: chat_member_updated_parser,
