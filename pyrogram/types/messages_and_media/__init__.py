@@ -42,6 +42,7 @@ from .poll_option import PollOption
 from .reaction import Reaction
 from .sticker import Sticker
 from .stripped_thumbnail import StrippedThumbnail
+from .requested_chats import RequestedChats
 from .story import Story
 from .thumbnail import Thumbnail
 from .venue import Venue
@@ -57,7 +58,7 @@ __all__ = [
     "Animation", "Audio", "BoostsStatus", "Contact", "Document", "ForumTopic", "ForumTopicCreated",
     "ForumTopicClosed", "ForumTopicReopened", "ForumTopicEdited", "GeneralTopicHidden",
     "GeneralTopicUnhidden", "Game", "GiftCode", "Giveaway", "GiveawayResult", "Location",
-    "Message", "MessageEntity", "Photo", "Thumbnail", "StrippedThumbnail", "Story", "Poll",
+    "Message", "MessageEntity", "Photo", "Thumbnail", "StrippedThumbnail", "RequestedChats", "Story", "Poll",
     "PollOption", "Sticker", "Venue", "Video", "VideoNote", "Voice", "WebPage", "Dice", "Reaction",
     "WebAppData", "MessageReactions", "MyBoost"
 ]
