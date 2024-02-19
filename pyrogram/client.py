@@ -97,7 +97,7 @@ class Client(Methods):
             Defaults to "en".
 
         system_lang_code (``str``, *optional*):
-            Code for the language used on the device's OS, ISO 639-1 standard
+            Code of the language used on the system, in ISO 639-1 standard.
             Defaults to "en".
 
         ipv6 (``bool``, *optional*):
