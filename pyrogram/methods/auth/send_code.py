@@ -21,8 +21,6 @@ import logging
 import pyrogram
 from pyrogram import raw, types
 from pyrogram.errors import NetworkMigrate, PhoneMigrate
-from pyrogram.raw.functions.help import GetCountriesList, GetNearestDc
-from pyrogram.raw.functions.langpack import GetLangPack
 from pyrogram.session import Auth, Session
 
 log = logging.getLogger(__name__)
