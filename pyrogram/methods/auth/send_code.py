@@ -32,9 +32,6 @@ class SendCode:
     async def send_code(
         self: "pyrogram.Client",
         phone_number: str,
-        lang_pack: str = "",
-        lang_code: str = "en",
-        hash: int = 0,
         settings: "raw.base.CodeSettings" = raw.types.CodeSettings()
     ) -> "types.SentCode":
         """Send the confirmation code to the given phone number.
@@ -44,18 +41,6 @@ class SendCode:
         Parameters:
             phone_number (``str``):
                 Phone number in international format (includes the country prefix).
-
-            lang_pack (``str``, *optional*):
-                Name of the language pack used on the client.
-                Defaults to "" (empty string).
-
-            lang_code (``str``, *optional*):
-                Code of the language used on the client, in ISO 639-1 standard.
-                Defaults to "en".
-            
-            hash (``int`` ``32-bit``, *optional*):
-                Hash for pagination.
-                Defaults to 0.
             
             settings (:obj:`CodeSettings <pyrogram.raw.base.CodeSettings>`):
                 Settings used by telegram servers for sending the confirm code.
@@ -68,9 +53,7 @@ class SendCode:
             BadRequest: In case the phone number is invalid.
         """
         phone_number = phone_number.strip(" +")
-        await self.invoke(GetLangPack(lang_pack=lang_pack, lang_code=lang_code))
-        await self.invoke(GetNearestDc())
-        await self.invoke(GetCountriesList(lang_code=lang_code, hash=hash))
+        
         while True:
             try:
                 r = await self.invoke(
