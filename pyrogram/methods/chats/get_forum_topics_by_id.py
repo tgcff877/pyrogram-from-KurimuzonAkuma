@@ -70,12 +70,18 @@ class GetForumTopicsByID:
             )
         )
 
-        users = {i.id: i for i in r.users}
-        chats = {i.id: i for i in r.chats}
-
         topics = types.List()
+        users = {u.id: u for u in getattr(r, "users", [])}
+        chats = {c.id: c for c in getattr(r, "chats", [])}
+        messages = {m.id: m for m in getattr(r, "messages", [])}
 
-        for i in r.topics:
-            topics.append(types.ForumTopic._parse(self, i, users=users, chats=chats))
+        for current in getattr(r, "topics", []):
+            topics.append(types.ForumTopic._parse(
+                self, 
+                forum_topic=current,
+                messages=messages,
+                users=users, 
+                chats=chats
+            ))
 
         return topics if is_iterable else topics[0] if topics else None
