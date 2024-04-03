@@ -16,13 +16,16 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Callable, Any, Awaitable
+
 import pyrogram
 
 
 class Stop:
     async def stop(
         self: "pyrogram.Client",
-        block: bool = True
+        block: bool = True,
+        on_shutdown: Callable[[Any, Any], Awaitable[Any]] = None
     ):
         """Stop the Client.
 
@@ -58,6 +61,8 @@ class Stop:
         """
 
         async def do_it():
+            if on_shutdown:
+                await on_shutdown()
             await self.terminate()
             await self.disconnect()
 

@@ -17,6 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+from typing import Callable, Any, Awaitable
 
 import pyrogram
 from pyrogram import raw
@@ -26,7 +27,8 @@ log = logging.getLogger(__name__)
 
 class Start:
     async def start(
-        self: "pyrogram.Client"
+        self: "pyrogram.Client",
+        on_startup: Callable[[Any, Any], Awaitable[Any]] = None
     ):
         """Start the client.
 
@@ -64,6 +66,9 @@ class Start:
             if not await self.storage.is_bot() and self.takeout:
                 self.takeout_id = (await self.invoke(raw.functions.account.InitTakeoutSession())).id
                 log.info("Takeout session %s initiated", self.takeout_id)
+
+            if on_startup:
+                await on_startup()
 
             await self.invoke(raw.functions.updates.GetState())
         except (Exception, KeyboardInterrupt):

@@ -18,6 +18,7 @@
 
 import asyncio
 import inspect
+from typing import Callable, Any, Awaitable
 
 import pyrogram
 from pyrogram.methods.utilities.idle import idle
@@ -26,7 +27,9 @@ from pyrogram.methods.utilities.idle import idle
 class Run:
     def run(
         self: "pyrogram.Client",
-        coroutine=None
+        coroutine: Callable[[Any, Any], Awaitable[Any]] = None,
+        on_startup: Callable[[Any, Any], Awaitable[Any]] = None,
+        on_shutdown: Callable[[Any, Any], Awaitable[Any]] = None
     ):
         """Start the client, idle the main script and finally stop the client.
 
@@ -74,13 +77,17 @@ class Run:
         run = loop.run_until_complete
 
         if coroutine is not None:
+            if on_startup:
+                run(on_startup())
             run(coroutine)
+            if on_shutdown:
+                run(on_shutdown())
         else:
             if inspect.iscoroutinefunction(self.start):
-                run(self.start())
+                run(self.start(on_startup=on_startup))
                 run(idle())
-                run(self.stop())
+                run(self.stop(on_shutdown=on_shutdown))
             else:
-                self.start()
+                self.start(on_startup=on_startup)
                 run(idle())
-                self.stop()
+                self.stop(on_shutdown=on_shutdown)
