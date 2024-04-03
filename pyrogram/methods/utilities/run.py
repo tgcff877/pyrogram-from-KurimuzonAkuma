@@ -47,6 +47,18 @@ class Run:
             coroutine (``Coroutine``, *optional*):
                 Pass a coroutine to run it until it completes.
 
+            on_startup (``callable``, *optional*):
+                Function to execute when client is started.
+
+            on_shutdown (``callable``, *optional*):
+                Function to execute on client's shutdown.
+
+            NOTE: 
+                You can use client methods in on_startup and on_shutdown
+                functions only if you're not specifying a coroutine in run()
+                since new functions run only before coroutine (it means before client is authorized)
+                and after It's finished (after client is terminated).
+
         Raises:
             ConnectionError: In case you try to run an already started client.
 

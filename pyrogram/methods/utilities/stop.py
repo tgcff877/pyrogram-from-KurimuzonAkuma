@@ -36,6 +36,9 @@ class Stop:
                 Blocks the code execution until the client has been stopped. It is useful with ``block=False`` in case
                 you want to stop the own client *within* a handler in order not to cause a deadlock.
                 Defaults to True.
+                
+            on_shutdown (``callable``, *optional*):
+                Function to execute on client's shutdown.
 
         Returns:
             :obj:`~pyrogram.Client`: The stopped client itself.

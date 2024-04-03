@@ -35,6 +35,10 @@ class Start:
         This method connects the client to Telegram and, in case of new sessions, automatically manages the
         authorization process using an interactive prompt.
 
+        Parameters:
+            on_startup (``callable``, *optional*):
+                Function to execute when client is started.
+
         Returns:
             :obj:`~pyrogram.Client`: The started client itself.
 
