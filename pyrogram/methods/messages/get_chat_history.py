@@ -89,10 +89,10 @@ class GetChatHistory:
                 Pass a date as offset to retrieve only older messages starting from that date.
 
             min_id (``int``, *optional*):
-                If a positive value was transferred, the method will return only messages with IDs more than min_id
+                If a positive value was provided, the method will return only messages with IDs more than min_id.
 
             max_id (``int``, *optional*):
-                If a positive value was transferred, the method will return only messages with IDs less than max_id
+                If a positive value was provided, the method will return only messages with IDs less than max_id.
 
         Returns:
             ``Generator``: A generator yielding :obj:`~pyrogram.types.Message` objects.
