@@ -31,6 +31,7 @@ from .premium import Premium
 from .users import Users
 from .stories import Stories
 from .utilities import Utilities
+from .fragment import Fragment
 
 
 class Methods(
@@ -49,5 +50,6 @@ class Methods(
     Decorators,
     Utilities,
     InviteLinks,
+    Fragment
 ):
     pass

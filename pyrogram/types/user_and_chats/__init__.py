@@ -49,6 +49,7 @@ from .video_chat_ended import VideoChatEnded
 from .video_chat_members_invited import VideoChatMembersInvited
 from .video_chat_scheduled import VideoChatScheduled
 from .video_chat_started import VideoChatStarted
+from .collectible_info import CollectibleInfo
 
 __all__ = [
     "Birthday",
@@ -83,5 +84,6 @@ __all__ = [
     "ChatJoiner",
     "EmojiStatus",
     "Folder",
-    "ChatReactions"
+    "ChatReactions",
+    "CollectibleInfo"
 ]
