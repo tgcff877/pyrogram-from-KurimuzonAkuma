@@ -132,5 +132,8 @@ class ChatEventAction(AutoName):
     DELETED_FORUM_TOPIC = auto()
     "a forum topic has been deleted (see `deleted_forum_topic`)"
 
+    HISTORY_CLEARED = auto()
+    "the chat history has been cleared (see `MessageActionHistoryClear`)"
+
     UNKNOWN = auto()
     "Unknown chat event action"
