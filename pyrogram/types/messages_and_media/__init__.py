@@ -54,6 +54,7 @@ from .video_note import VideoNote
 from .voice import Voice
 from .web_app_data import WebAppData
 from .web_page import WebPage
+from.sponsored_message import SponsoredMessage
 
 __all__ = [
     "Animation",
@@ -94,4 +95,5 @@ __all__ = [
     "Voice",
     "WebAppData",
     "WebPage",
+    "SponsoredMessage"
 ]
