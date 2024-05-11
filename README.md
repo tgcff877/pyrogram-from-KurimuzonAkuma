@@ -9,7 +9,7 @@
         Homepage
     </a>
     •
-    <a href="https://docs.pyrogram.org">
+    <a href="https://pyrodocs.kurimuzon.ru">
         Documentation
     </a>
     •
@@ -65,7 +65,7 @@ If you'd like to support Pyrogram, you can consider:
 ### Installing
 
 ``` bash
-pip3 install pyrogram
+$ pip3 install -U https://github.com/KurimuzonAkuma/pyrogram/archive/dev.zip
 ```
 
 ### Resources
