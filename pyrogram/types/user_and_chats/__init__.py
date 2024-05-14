@@ -50,7 +50,7 @@ from .video_chat_ended import VideoChatEnded
 from .video_chat_members_invited import VideoChatMembersInvited
 from .video_chat_scheduled import VideoChatScheduled
 from .video_chat_started import VideoChatStarted
-from .profile_video import ProfileVideo
+from .chat_video import ChatVideo
 
 __all__ = [
     "Birthday",
@@ -87,5 +87,5 @@ __all__ = [
     "Folder",
     "GroupCallMember",
     "ChatReactions",
-    "ProfileVideo"
+    "ChatVideo"
 ]

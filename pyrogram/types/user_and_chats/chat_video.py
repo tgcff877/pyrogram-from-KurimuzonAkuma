@@ -24,7 +24,7 @@ from ..object import Object
 from typing import List, Union, Callable, BinaryIO, Optional
 from datetime import datetime
 
-class ProfileVideo(Object):
+class ChatVideo(Object):
     def __init__(
         self,
         file_id: str,
@@ -32,7 +32,7 @@ class ProfileVideo(Object):
         emoji_id: int = None,
         date: datetime = None
     ) -> None:
-        """Profile animated photo.
+        """Chat animated photo.
 
         Args:
             file_id (str): Video file_id, download it using download_media to use it in send_* methods.
@@ -46,8 +46,11 @@ class ProfileVideo(Object):
         self.date = date
 
     @staticmethod
-    def _parse(client, video: "raw.types.Photo") -> "ProfileVideo":
+    def _parse(client, video: "raw.types.Photo") -> "ChatVideo":
         if not video.video_sizes:
+            return
+
+        if len(video.video_sizes) == 1:
             return
 
         if isinstance(video.video_sizes[-1], raw.types.VideoSizeEmojiMarkup):
@@ -70,7 +73,7 @@ class ProfileVideo(Object):
             volume_id=0, local_id=0
         ).encode()
 
-        r = ProfileVideo(
+        r = ChatVideo(
             file_id=f_id,
             background_colors=background_colors,
             emoji_id=emoji_id,

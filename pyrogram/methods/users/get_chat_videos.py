@@ -22,18 +22,18 @@ from pyrogram import types
 
 from typing import AsyncGenerator, Optional, Union
 
-class GetUserVideos:
-    async def get_user_videos(
+class GetChatVideos:
+    async def get_chat_videos(
         self: "pyrogram.Client",
-        user_id: Union[str, int],
+        chat_id: Union[str, int],
         limit: int = 0,
-    ) -> Optional[AsyncGenerator["types.ProfileVideo", None]]:
-        """Get a chat profile videos sequentially.
+    ) -> Optional[AsyncGenerator["types.ChatVideo", None]]:
+        """Get a chat videos sequentially.
 
         .. include:: /_includes/usable-by/users-bots.rst
 
         Parameters:
-            user_id (``int`` | ``str``):
+            chat_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target user.
                 For your personal cloud (Saved Messages) you can simply use "me" or "self".
                 For a contact that exists in your Telegram address book you can use his phone number (str).
@@ -43,41 +43,51 @@ class GetUserVideos:
                 By default, no limit is applied and all profile videos are returned.
 
         Returns:
-            ``Generator``: A generator yielding :obj:`~pyrogram.types.ProfileVideo` objects.
+            ``Generator``: A generator yielding :obj:`~pyrogram.types.ChatVideo` objects.
 
         Example:
             .. code-block:: python
 
-                async for video in app.get_videos("me"):
+                async for video in app.get_chat_videos("me"):
                     print(video)
         """
-        peer = await self.resolve_peer(user_id)
+        peer_id = await self.resolve_peer(chat_id)
 
-        current = 0
-        total = limit or (1 << 31)
-        limit = min(100, total)
-        offset = 0
-
-        while True:
+        if isinstance(peer_id, raw.types.InputPeerChannel):
             r = await self.invoke(
-                raw.functions.photos.GetUserPhotos(
-                    user_id=peer,
-                    offset=offset,
-                    max_id=0,
-                    limit=limit
+                raw.functions.channels.GetFullChannel(
+                    channel=peer_id
                 )
             )
-            videos = [types.ProfileVideo._parse(self, photo) for photo in r.photos]
+            if r.full_chat.chat_photo:
+                yield types.ChatVideo._parse(r.full_chat.chat_photo)
 
-            if not videos:
-                return
+        else:
+            current = 0
+            total = limit or (1 << 31)
+            limit = min(100, total)
+            offset = 0
 
-            offset += len(videos)
+            while True:
+                r = await self.invoke(
+                    raw.functions.photos.GetUserPhotos(
+                        user_id=peer_id,
+                        offset=offset,
+                        max_id=0,
+                        limit=limit
+                    )
+                )
+                videos = [types.ChatVideo._parse(self, photo) for photo in r.photos]
 
-            for video in videos:
-                yield video
+                if not videos:
+                    return
 
-            current += 1
+                offset += len(videos)
 
-            if current >= total:
-                return
+                for video in videos:
+                    yield video
+
+                current += 1
+
+                if current >= total:
+                    return
