@@ -22,19 +22,19 @@ from pyrogram import types
 
 from typing import AsyncGenerator, Optional, Union
 
-class GetUserProfileVideos:
-    async def get_user_profile_videos(
+class GetUserVideos:
+    async def get_user_videos(
         self: "pyrogram.Client",
         user_id: Union[str, int],
         limit: int = 0,
     ) -> Optional[AsyncGenerator["types.ProfileVideo", None]]:
-        """Get a user profile videos sequentially.
+        """Get a chat profile videos sequentially.
 
         .. include:: /_includes/usable-by/users-bots.rst
 
         Parameters:
-            chat_id (``int`` | ``str``):
-                Unique identifier (int) or username (str) of the target chat.
+            user_id (``int`` | ``str``):
+                Unique identifier (int) or username (str) of the target user.
                 For your personal cloud (Saved Messages) you can simply use "me" or "self".
                 For a contact that exists in your Telegram address book you can use his phone number (str).
 
@@ -48,7 +48,7 @@ class GetUserProfileVideos:
         Example:
             .. code-block:: python
 
-                async for video in app.get_user_profile_videos("me"):
+                async for video in app.get_videos("me"):
                     print(video)
         """
         peer = await self.resolve_peer(user_id)
