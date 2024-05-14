@@ -60,8 +60,7 @@ class GetChatVideos:
                 )
             )
             if r.full_chat.chat_photo:
-                yield types.ChatVideo._parse(r.full_chat.chat_photo)
-
+                yield types.ChatVideo._parse(self, r.full_chat.chat_photo)
         else:
             current = 0
             total = limit or (1 << 31)
