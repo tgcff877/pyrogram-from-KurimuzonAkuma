@@ -31,7 +31,7 @@ DEFAULT_DOWNLOAD_DIR = "downloads/"
 class DownloadMedia:
     async def download_media(
         self: "pyrogram.Client",
-        message: Union["types.Message", "types.Story", "types.ProfileVideo", str],
+        message: Union["types.Message", "types.Story", "types.ChatVideo", str],
         file_name: str = DEFAULT_DOWNLOAD_DIR,
         in_memory: bool = False,
         block: bool = True,
@@ -169,7 +169,7 @@ class DownloadMedia:
         if not file_name:
             guessed_extension = self.guess_extension(mime_type)
 
-            if isinstance(message, types.ProfileVideo):
+            if isinstance(message, types.ChatVideo):
                 extension = ".mp4"
             elif file_type in PHOTO_TYPES:
                 extension = ".jpg"
