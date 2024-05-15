@@ -16,46 +16,44 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List
+from typing import Optional, Union, List
 
 import pyrogram
 from pyrogram import raw
+from pyrogram import types
 
 
-class IncrementStoryViews:
-    async def increment_story_views(
+class GetSponsoredMessages:
+    async def get_sponsored_messages(
         self: "pyrogram.Client",
         chat_id: Union[int, str],
-        story_id: Union[int, List[int]],
-    ) -> bool:
-        """Increment story views.
+    ) -> Optional[List["types.SponsoredMessage"]]:
+        """Get a sponsored messages.
 
         .. include:: /_includes/usable-by/users.rst
 
         Parameters:
             chat_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target chat.
-                For a contact that exists in your Telegram address book you can use his phone number (str).
-
-            story_id (``int`` | List of ``int``):
-                Identifier or list of story identifiers of the target story.
 
         Returns:
-            ``bool``: On success, True is returned.
+            List of :obj:`~pyrogram.types.SponsoredMessage`: a list of sponsored messages is returned.
 
         Example:
             .. code-block:: python
 
-                # Increment story views
-                await app.increment_story_views(chat_id, 1)
+                # Get a sponsored messages
+                sm = await app.get_sponsored_messages(chat_id)
+                print(sm)
         """
-        ids = [story_id] if not isinstance(story_id, list) else story_id
-
         r = await self.invoke(
-            raw.functions.stories.IncrementStoryViews(
-                peer=await self.resolve_peer(chat_id),
-                id=ids
+            raw.functions.channels.GetSponsoredMessages(
+                channel=await self.resolve_peer(chat_id)
             )
         )
 
-        return r
+        if isinstance(r, raw.types.messages.SponsoredMessagesEmpty):
+            return None
+
+        return [types.SponsoredMessage._parse(self, sm) for sm in r.messages]
+

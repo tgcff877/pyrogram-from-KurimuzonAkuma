@@ -71,7 +71,8 @@ from .stop_poll import StopPoll
 from .stream_media import StreamMedia
 from .view_messages import ViewMessages
 from .vote_poll import VotePoll
-
+from .get_sponsored_messages import GetSponsoredMessages
+from .view_sponsored_message import ViewSponsoredMessage
 
 class Messages(
     DeleteMessages,
@@ -128,6 +129,8 @@ class Messages(
     GetDiscussionReplies,
     GetDiscussionRepliesCount,
     StreamMedia,
-    GetCustomEmojiStickers
+    GetCustomEmojiStickers,
+    GetSponsoredMessages,
+    ViewSponsoredMessage
 ):
     pass
