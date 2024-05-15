@@ -33,6 +33,7 @@ from .update_birthday import UpdateBirthday
 from .update_personal_channel import UpdatePersonalChannel
 from .update_profile import UpdateProfile
 from .update_status import UpdateStatus
+from .get_chat_videos import GetChatVideos
 
 
 class Users(
@@ -52,6 +53,7 @@ class Users(
     UpdateProfile,
     UpdateStatus,
     GetDefaultEmojiStatuses,
-    SetEmojiStatus
+    SetEmojiStatus,
+    GetChatVideos
 ):
     pass
