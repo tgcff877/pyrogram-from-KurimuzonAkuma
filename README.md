@@ -1,24 +1,12 @@
 <p align="center">
-    <a href="https://github.com/pyrogram/pyrogram">
-        <img src="https://docs.pyrogram.org/_static/pyrogram.png" alt="Pyrogram" width="128">
+    <a href="https://github.com/KurimuzonAkuma/pyrogram">
+        <img src="https://pyrodocs.kurimuzon.ru/_static/pyrogram.png" alt="Pyrogram" width="128">
     </a>
     <br>
     <b>Telegram MTProto API Framework for Python</b>
     <br>
-    <a href="https://pyrogram.org">
-        Homepage
-    </a>
-    •
     <a href="https://pyrodocs.kurimuzon.ru">
         Documentation
-    </a>
-    •
-    <a href="https://docs.pyrogram.org/releases">
-        Releases
-    </a>
-    •
-    <a href="https://t.me/pyrogram">
-        News
     </a>
 </p>
 
@@ -40,7 +28,7 @@ async def hello(client, message):
 app.run()
 ```
 
-**Pyrogram** is a modern, elegant and asynchronous [MTProto API](https://docs.pyrogram.org/topics/mtproto-vs-botapi)
+**Pyrogram** is a modern, elegant and asynchronous [MTProto API](https://pyrodocs.kurimuzon.ru/topics/mtproto-vs-botapi)
 framework. It enables you to easily interact with the main Telegram API through a user account (custom client) or a bot
 identity (bot API alternative) using Python.
 
@@ -70,6 +58,6 @@ $ pip3 install -U https://github.com/KurimuzonAkuma/pyrogram/archive/dev.zip
 
 ### Resources
 
-- Check out the docs at https://docs.pyrogram.org to learn more about Pyrogram, get started right
+- Check out the docs at https://pyrodocs.kurimuzon.ru to learn more about Pyrogram, get started right
 away and discover more in-depth material for building your client applications.
 - Join the official channel at https://t.me/pyrogram and stay tuned for news, updates and announcements.
