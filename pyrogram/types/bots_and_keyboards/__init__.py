@@ -48,6 +48,7 @@ from .request_poll_info import RequestPollInfo
 from .requested_chats import RequestedChats
 from .sent_web_app_message import SentWebAppMessage
 from .shipping_address import ShippingAddress
+from .successful_payment import SuccessfulPayment
 from .web_app_info import WebAppInfo
 
 __all__ = [
@@ -83,5 +84,6 @@ __all__ = [
     "SentWebAppMessage",
     "ShippingAddress",
     "PaymentInfo",
-    "PreCheckoutQuery"
+    "PreCheckoutQuery",
+    "SuccessfulPayment"
 ]
