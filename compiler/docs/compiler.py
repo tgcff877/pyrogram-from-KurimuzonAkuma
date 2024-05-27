@@ -506,6 +506,7 @@ def pyrogram_api():
             GiveawayResult
             GiftCode
             CheckedGiftCode
+            SuccessfulPayment
         """,
         bot_keyboards="""
         Bot keyboards
