@@ -22,7 +22,7 @@ from typing import Callable, Union, List, Pattern
 
 import pyrogram
 from pyrogram import enums
-from pyrogram.types import Message, CallbackQuery, InlineQuery, InlineKeyboardMarkup, ReplyKeyboardMarkup, Update
+from pyrogram.types import Message, CallbackQuery, InlineQuery, PreCheckoutQuery, InlineKeyboardMarkup, ReplyKeyboardMarkup, Update
 
 
 class Filter:
@@ -939,6 +939,7 @@ def regex(pattern: Union[str, Pattern], flags: int = 0):
     - :obj:`~pyrogram.types.Message`: The filter will match ``text`` or ``caption``.
     - :obj:`~pyrogram.types.CallbackQuery`: The filter will match ``data``.
     - :obj:`~pyrogram.types.InlineQuery`: The filter will match ``query``.
+    - :obj:`~pyrogram.types.PreCheckoutQuery`: The filter will match ``payload``.
 
     When a pattern matches, all the `Match Objects <https://docs.python.org/3/library/re.html#match-objects>`_ are
     stored in the ``matches`` field of the update object itself.
@@ -958,6 +959,8 @@ def regex(pattern: Union[str, Pattern], flags: int = 0):
             value = update.data
         elif isinstance(update, InlineQuery):
             value = update.query
+        elif isinstance(update, PreCheckoutQuery):
+            value = update.payload
         else:
             raise ValueError(f"Regex filter doesn't work with {type(update)}")
 
