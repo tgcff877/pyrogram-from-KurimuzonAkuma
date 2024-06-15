@@ -75,12 +75,12 @@ class TCP:
         try:
             ip_address = ipaddress.ip_address(hostname)
         except ValueError:
-            sock = socks.socksocket(socket.AF_INET)
+            is_proxy_ipv6 = False
         else:
-            if isinstance(ip_address, ipaddress.IPv6Address):
-                sock = socks.socksocket(socket.AF_INET6)
-            else:
-                sock = socks.socksocket(socket.AF_INET)
+            is_proxy_ipv6 = isinstance(ip_address, ipaddress.IPv6Address)
+
+        proxy_family = socket.AF_INET6 if is_proxy_ipv6 else socket.AF_INET
+        sock = socks.socksocket(proxy_family)
 
         sock.set_proxy(
             proxy_type=proxy_type,
@@ -89,13 +89,15 @@ class TCP:
             username=username,
             password=password
         )
-
         sock.settimeout(TCP.TIMEOUT)
 
-        with ThreadPoolExecutor(1) as executor:
-            await self.loop.run_in_executor(executor, sock.connect, destination)
-        
+        await self.loop.sock_connect(
+            sock=sock,
+            address=destination
+        )
+
         sock.setblocking(False)
+
         self.reader, self.writer = await asyncio.open_connection(
             sock=sock
         )
