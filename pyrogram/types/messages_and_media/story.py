@@ -1605,7 +1605,7 @@ class Story(Object, Update):
 
     async def edit_privacy(
         self,
-        privacy: "enums.StoriesPrivacyRules" = None,
+        privacy: "enums.StoriesPrivacyRules" = enums.StoriesPrivacyRules.PUBLIC,
         allowed_users: List[Union[int, str]] = None,
         disallowed_users: List[Union[int, str]] = None,
     ) -> "types.Story":
@@ -1627,7 +1627,7 @@ class Story(Object, Update):
 
         Parameters:
             privacy (:obj:`~pyrogram.enums.StoriesPrivacyRules`, *optional*):
-                Story privacy.
+                Story privacy. Defaults to :obj:`~pyrogram.enums.StoriesPrivacyRules.PUBLIC`.
 
             allowed_users (List of ``int`` | ``str``, *optional*):
                 List of user_id or chat_id of chat users who are allowed to view stories.
