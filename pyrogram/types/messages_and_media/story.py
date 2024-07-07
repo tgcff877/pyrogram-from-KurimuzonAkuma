@@ -104,7 +104,7 @@ class Story(Object, Update):
         forwards (``int``, *optional*):
             Stories forwards.
 
-        privacy (:obj:`~pyrogram.enums.StoryPrivacyRules`, *optional*):
+        privacy (:obj:`~pyrogram.enums.StoriesPrivacyRules`, *optional*):
             Story privacy.
 
         allowed_users (List of ``int`` | ``str``, *optional*):
@@ -158,7 +158,7 @@ class Story(Object, Update):
         caption_entities: List["types.MessageEntity"] = None,
         views: int = None,
         forwards: int = None,
-        privacy: "enums.StoryPrivacyRules" = None,
+        privacy: "enums.StoriesPrivacyRules" = None,
         allowed_users: List[Union[int, str]] = None,
         disallowed_users: List[Union[int, str]] = None,
         reactions: List["types.Reaction"] = None,
