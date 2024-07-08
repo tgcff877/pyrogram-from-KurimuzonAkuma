@@ -41,7 +41,7 @@ async def get_chunk(
             q=query,
             filter=filter.value(),
             min_date=min_date,
-            max_date=min_date,
+            max_date=max_date,
             offset_id=offset_id,
             add_offset=offset,
             limit=limit,
