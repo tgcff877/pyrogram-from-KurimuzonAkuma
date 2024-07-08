@@ -220,7 +220,7 @@ class Sticker(Object):
         progress: Callable = None,
         progress_args: tuple = ()
     ) -> str:
-        """Bound method *download* of :obj:`~pyrogram.types.Message`.
+        """Bound method *download* of :obj:`~pyrogram.types.Sticker`.
 
         Use as a shortcut for:
 
