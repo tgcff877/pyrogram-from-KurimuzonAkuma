@@ -150,7 +150,7 @@ class SearchMessages:
                 max_date=max_date,
                 offset_id=offset_id,
                 min_id=min_id,
-                min_id=max_id,
+                max_id=max_id,
                 limit=limit,
                 from_user=from_user
             )
