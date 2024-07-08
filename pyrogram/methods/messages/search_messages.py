@@ -70,9 +70,9 @@ class SearchMessages:
         chat_id: Union[int, str],
         query: str = "",
         offset: int = 0,
+        offset_id: int = 0,
         min_date: datetime = utils.zero_datetime(),
         max_date: datetime = utils.zero_datetime(),
-        offset_id: int = 0,
         min_id: int = 0,
         max_id: int = 0,
         filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
@@ -103,6 +103,18 @@ class SearchMessages:
 
             offset_id (``int``, *optional*):
                 Identifier of the first message to be returned.
+
+            min_date (:py:obj:`~datetime.datetime`, *optional*):
+                Pass a date as offset to retrieve only older messages starting from that date.
+
+            max_date (:py:obj:`~datetime.datetime`, *optional*):
+                Pass a date as offset to retrieve only newer messages starting from that date.
+
+            min_id (``int``, *optional*):
+                If a positive value was provided, the method will return only messages with IDs more than min_id.
+
+            max_id (``int``, *optional*):
+                If a positive value was provided, the method will return only messages with IDs less than max_id.      
 
             filter (:obj:`~pyrogram.enums.MessagesFilter`, *optional*):
                 Pass a filter in order to search for specific kind of messages only.
@@ -147,9 +159,9 @@ class SearchMessages:
                 query=query,
                 filter=filter,
                 offset=offset,
+                offset_id=offset_id,
                 min_date=min_date,
                 max_date=max_date,
-                offset_id=offset_id,
                 min_id=min_id,
                 max_id=max_id,
                 limit=limit,
