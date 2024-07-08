@@ -17,6 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Union, List, AsyncGenerator, Optional
+from datetime import datetime
 
 import pyrogram
 from pyrogram import raw, types, utils, enums
