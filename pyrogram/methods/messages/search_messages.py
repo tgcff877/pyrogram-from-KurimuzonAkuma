@@ -72,8 +72,8 @@ class SearchMessages:
         min_date: datetime = utils.zero_datetime(),
         max_date: datetime = utils.zero_datetime(),
         offset_id: int = 0,
-        min_id: int: = 0,
-        max_id: int: = 0,
+        min_id: int = 0,
+        max_id: int = 0,
         filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
         limit: int = 0,
         from_user: Union[int, str] = None
