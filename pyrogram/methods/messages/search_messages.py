@@ -30,8 +30,8 @@ async def get_chunk(
     filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
     offset: int = 0,
     offset_id: int = 0,
-    min_date = 0,
-    max_date = 0,
+    min_date = utils.zero_datetime(),
+    max_date = utils.zero_datetime(),
     limit: int = 100,
     from_user: Union[int, str] = None
 ) -> List["types.Message"]:
