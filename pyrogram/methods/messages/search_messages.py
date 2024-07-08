@@ -30,11 +30,11 @@ async def get_chunk(
     filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
     offset: int = 0,
     offset_id: int = 0,
-    min_date = utils.zero_datetime(),
-    max_date = utils.zero_datetime(),
+    min_date: datetime = utils.zero_datetime(),
+    max_date: datetime = utils.zero_datetime(),
     limit: int = 100,
-    min_id = 0,
-    max_id = 0,
+    min_id: int = 0,
+    max_id: int = 0,
     from_user: Union[int, str] = None
 ) -> List["types.Message"]:
     r = await client.invoke(
@@ -72,8 +72,8 @@ class SearchMessages:
         min_date = utils.zero_datetime(),
         max_date = utils.zero_datetime(),
         offset_id: int = 0,
-        min_id int: = 0,
-        max_id int: = 0,
+        min_id: int: = 0,
+        max_id: int: = 0,
         filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
         limit: int = 0,
         from_user: Union[int, str] = None
