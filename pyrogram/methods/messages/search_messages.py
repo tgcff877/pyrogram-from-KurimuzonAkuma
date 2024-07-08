@@ -30,6 +30,8 @@ async def get_chunk(
     filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
     offset: int = 0,
     offset_id: int = 0,
+    min_date = 0,
+    max_date = 0,
     limit: int = 100,
     from_user: Union[int, str] = None
 ) -> List["types.Message"]:
@@ -38,8 +40,8 @@ async def get_chunk(
             peer=await client.resolve_peer(chat_id),
             q=query,
             filter=filter.value(),
-            min_date=0,
-            max_date=0,
+            min_date=min_date,
+            max_date=min_date,
             offset_id=offset_id,
             add_offset=offset,
             limit=limit,
@@ -65,6 +67,8 @@ class SearchMessages:
         chat_id: Union[int, str],
         query: str = "",
         offset: int = 0,
+        max_date = 0,
+        min_date = 0,
         offset_id: int = 0,
         filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
         limit: int = 0,
@@ -138,6 +142,8 @@ class SearchMessages:
                 query=query,
                 filter=filter,
                 offset=offset,
+                min_date=min_date,
+                max_date=max_date,
                 offset_id=offset_id,
                 limit=limit,
                 from_user=from_user
