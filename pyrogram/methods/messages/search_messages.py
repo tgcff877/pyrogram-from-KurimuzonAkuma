@@ -29,6 +29,7 @@ async def get_chunk(
     query: str = "",
     filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
     offset: int = 0,
+    offset_id: int = 0,
     limit: int = 100,
     from_user: Union[int, str] = None
 ) -> List["types.Message"]:
@@ -39,7 +40,7 @@ async def get_chunk(
             filter=filter.value(),
             min_date=0,
             max_date=0,
-            offset_id=0,
+            offset_id=offset_id,
             add_offset=offset,
             limit=limit,
             min_id=0,
@@ -64,6 +65,7 @@ class SearchMessages:
         chat_id: Union[int, str],
         query: str = "",
         offset: int = 0,
+        offset_id: int = 0,
         filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,
         limit: int = 0,
         from_user: Union[int, str] = None
@@ -89,6 +91,9 @@ class SearchMessages:
             offset (``int``, *optional*):
                 Sequential number of the first message to be returned.
                 Defaults to 0.
+
+            offset_id (``int``, *optional*):
+                Identifier of the first message to be returned.
 
             filter (:obj:`~pyrogram.enums.MessagesFilter`, *optional*):
                 Pass a filter in order to search for specific kind of messages only.
@@ -133,6 +138,7 @@ class SearchMessages:
                 query=query,
                 filter=filter,
                 offset=offset,
+                offset_id=offset_id,
                 limit=limit,
                 from_user=from_user
             )
